@@ -1,0 +1,40 @@
+#*****************************************************************
+# File:   Makefile_p4
+# Author: PSCD-Unizar
+# Date:   octubre 2022
+# Coms:   Ejecutar "make -f Makefile_p4" para compilar
+#         Ejecutar "make -f Makefile_p4 clean" para limpiar (borrar lo que genere)
+#*****************************************************************
+
+#---------------------------------------------------------
+# macros
+RM = /bin/rm -f  # para limpiar
+CC = g++         # compilador
+#---------------------------------------------------------
+MONITOR=ControlParejas
+#---------------------------------------------------------
+# opciones compilación y enlazado ("linkado")
+CPPFLAGS = -std=c++11 -fmax-errors=1 # opciones compilación
+LDFLAGS  = -pthread  # opciones de "linkado"
+#---------------------------------------------------------
+# vars
+EJEC = main
+
+all: ${EJEC}
+#---------------------------------------------------------
+# "linkar"
+${EJEC}: ${EJEC}.o ${MONITOR}.o
+	${CC} ${EJEC}.o ${MONITOR}.o -o ${EJEC} ${CPPFLAGS} ${LDFLAGS}
+
+#---------------------------------------------------------
+# compilar
+${EJEC}.o: ${EJEC}.cpp
+	${CC} -c ${EJEC}.cpp -o ${EJEC}.o ${CPPFLAGS}
+
+${MONITOR}.o: ${MONITOR}.hpp ${MONITOR}.cpp
+	${CC} -c ${MONITOR}.cpp -o ${MONITOR}.o ${CPPFLAGS}
+
+#---------------------------------------------------------
+# Cuidado con lo que se pone aquí, que se borra sin preguntar
+clean:
+	$(RM) ${MONITOR}.o ${EJEC}.o ${EJEC}
